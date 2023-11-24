@@ -33,21 +33,21 @@ for (const invoice of invoices) {
  *          - 임시 변수를 질의 함수로 바꾸기 ( play 변수 제거하기 )
  *          - 변수 인라인하기 ( thisAmount )
  *          - 적립 포인트 계산 추출하기
+ *          - format 변수 제거하기 ( 함수로 추출 )
  */
 function statement(invoice: Invoice, plays: Plays) {
   let totalAmount = 0;
   let volumeCredits = 0;
   let result = `청구 내역 (고객명: ${invoice.customer}) \n`;
-  const format = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format;
 
   for (const perf of invoice.performances) {
     volumeCredits += volumeCreditsFor(perf);
 
-    result += ` ${playFor(perf).name}: ${format(amountFor(perf))} (${perf.audience}석)  \n`;
+    result += ` ${playFor(perf).name}: ${krw(amountFor(perf))} (${perf.audience}석)  \n`;
     totalAmount += amountFor(perf);
   }
 
-  result += `총액: ${format(totalAmount)}\n`;
+  result += `총액: ${krw(totalAmount)}\n`;
   result += `적립포인트: ${volumeCredits}점\n`;
   return result;
 }
@@ -98,4 +98,13 @@ function volumeCreditsFor(aPerformance: Performance) {
     result += Math.floor(aPerformance.audience / 5);
   }
   return result;
+}
+
+/**
+ * 화폐 단위 맞추기
+ * @param value
+ * @returns
+ */
+function krw(value: number) {
+  return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
 }
