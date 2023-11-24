@@ -1,0 +1,15 @@
+{
+  "name": "refactoring-book",
+  "version": "1.0.0",
+  "description": "2020년 4월 출간된 리팩터링(2판) &lt;한빛미디어> 내용 정리",
+  "scripts": {
+    "ch1": "ts-node src/chapter1/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^5.3.2"
+  }
+}
