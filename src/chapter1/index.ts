@@ -1,5 +1,5 @@
 import { Invoice, Performance, invoices } from './assets/invoices';
-import { Play, Plays, plays } from './assets/plays';
+import { Plays, playFor, plays } from './assets/plays';
 
 /**
  * 예제 1. 다양한 연극을 외로 받아서 공연하는 극단이 있다고 가정해보자
@@ -30,6 +30,7 @@ for (const invoice of invoices) {
  * @update  리펙토링 첫번째
  *          - 함수 추출하기 ( switch 구문을 함수로 추출 )
  *          - 변수 이름 변경하기
+ *          - 임시 변수를 질의 함수로 바꾸기 ( play 변수 제거하기 )
  */
 function statement(invoice: Invoice, plays: Plays) {
   let totalAmount = 0;
@@ -38,15 +39,14 @@ function statement(invoice: Invoice, plays: Plays) {
   const format = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format;
 
   for (const perf of invoice.performances) {
-    const play = plays[perf.playId];
-    let thisAmount = amountFor(play, perf);
+    let thisAmount = amountFor(perf);
 
     volumeCredits += Math.max(perf.audience - 30, 0);
-    if (play.type === 'comedy') {
+    if (playFor(perf).type === 'comedy') {
       volumeCredits += Math.floor(perf.audience / 5);
     }
 
-    result += ` ${play.name}: ${format(thisAmount)} (${perf.audience}석)  \n`;
+    result += ` ${playFor(perf).name}: ${format(thisAmount)} (${perf.audience}석)  \n`;
     totalAmount += thisAmount;
   }
 
@@ -63,10 +63,10 @@ function statement(invoice: Invoice, plays: Plays) {
  * @returns
  *
  */
-function amountFor(play: Play, aPerformance: Performance) {
+function amountFor(aPerformance: Performance) {
   let result = 0;
 
-  switch (play.type) {
+  switch (playFor(aPerformance).type) {
     case 'tragedy': // 비극
       result = 40000;
       if (aPerformance.audience > 30) {
@@ -83,7 +83,7 @@ function amountFor(play: Play, aPerformance: Performance) {
       break;
 
     default:
-      throw new Error(`Unknown play type`);
+      throw new Error(`Unknown play type: ${playFor(aPerformance)}`);
   }
 
   return result;

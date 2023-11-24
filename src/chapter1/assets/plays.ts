@@ -1,3 +1,5 @@
+import { Performance } from './invoices';
+
 /**
  * 극단이 공연할 공연 정보
  */
@@ -21,3 +23,13 @@ export const plays: Plays = {
     type: 'tragedy',
   },
 };
+
+/**
+ * const play = plays[perf.playId];
+ * 위 임시 변수를 질의 함수로 바꾸기
+ *
+ * @param aPerformance 공연
+ */
+export function playFor(aPerformance: Performance) {
+  return plays[aPerformance.playId];
+}
