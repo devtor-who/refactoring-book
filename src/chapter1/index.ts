@@ -29,6 +29,7 @@ for (const invoice of invoices) {
  *
  * @update  리펙토링 첫번째
  *          - 함수 추출하기 ( switch 구문을 함수로 추출 )
+ *          - 변수 이름 변경하기
  */
 function statement(invoice: Invoice, plays: Plays) {
   let totalAmount = 0;
@@ -60,6 +61,7 @@ function statement(invoice: Invoice, plays: Plays) {
  * @param play 극단에서 설정한 연극 정보
  * @param perf 실제로 진행한 공연 실적
  * @returns
+ *
  */
 function amountFor(play: Play, aPerformance: Performance) {
   let result = 0;
