@@ -61,28 +61,28 @@ function statement(invoice: Invoice, plays: Plays) {
  * @param perf 실제로 진행한 공연 실적
  * @returns
  */
-function amountFor(play: Play, perf: Performance) {
-  let thisAmount = 0;
+function amountFor(play: Play, aPerformance: Performance) {
+  let result = 0;
 
   switch (play.type) {
     case 'tragedy': // 비극
-      thisAmount = 40000;
-      if (perf.audience > 30) {
-        thisAmount += (perf.audience - 30) * 1000;
+      result = 40000;
+      if (aPerformance.audience > 30) {
+        result += (aPerformance.audience - 30) * 1000;
       }
       break;
 
     case 'comedy': // 희극
-      thisAmount = 30000;
-      if (perf.audience > 20) {
-        thisAmount += 10000 + (perf.audience - 20) * 500;
+      result = 30000;
+      if (aPerformance.audience > 20) {
+        result += 10000 + (aPerformance.audience - 20) * 500;
       }
-      thisAmount += 300 * perf.audience;
+      result += 300 * aPerformance.audience;
       break;
 
     default:
       throw new Error(`Unknown play type`);
   }
 
-  return thisAmount;
+  return result;
 }
