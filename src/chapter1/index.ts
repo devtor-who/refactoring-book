@@ -31,6 +31,7 @@ for (const invoice of invoices) {
  *          - 함수 추출하기 ( switch 구문을 함수로 추출 )
  *          - 변수 이름 변경하기
  *          - 임시 변수를 질의 함수로 바꾸기 ( play 변수 제거하기 )
+ *          - 변수 인라인하기 ( thisAmount )
  */
 function statement(invoice: Invoice, plays: Plays) {
   let totalAmount = 0;
@@ -39,15 +40,13 @@ function statement(invoice: Invoice, plays: Plays) {
   const format = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format;
 
   for (const perf of invoice.performances) {
-    let thisAmount = amountFor(perf);
-
     volumeCredits += Math.max(perf.audience - 30, 0);
     if (playFor(perf).type === 'comedy') {
       volumeCredits += Math.floor(perf.audience / 5);
     }
 
-    result += ` ${playFor(perf).name}: ${format(thisAmount)} (${perf.audience}석)  \n`;
-    totalAmount += thisAmount;
+    result += ` ${playFor(perf).name}: ${format(amountFor(perf))} (${perf.audience}석)  \n`;
+    totalAmount += amountFor(perf);
   }
 
   result += `총액: ${format(totalAmount)}\n`;
