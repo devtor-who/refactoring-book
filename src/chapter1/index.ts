@@ -32,6 +32,7 @@ for (const invoice of invoices) {
  *          - 변수 이름 변경하기
  *          - 임시 변수를 질의 함수로 바꾸기 ( play 변수 제거하기 )
  *          - 변수 인라인하기 ( thisAmount )
+ *          - 적립 포인트 계산 추출하기
  */
 function statement(invoice: Invoice, plays: Plays) {
   let totalAmount = 0;
@@ -40,10 +41,7 @@ function statement(invoice: Invoice, plays: Plays) {
   const format = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format;
 
   for (const perf of invoice.performances) {
-    volumeCredits += Math.max(perf.audience - 30, 0);
-    if (playFor(perf).type === 'comedy') {
-      volumeCredits += Math.floor(perf.audience / 5);
-    }
+    volumeCredits += volumeCreditsFor(perf);
 
     result += ` ${playFor(perf).name}: ${format(amountFor(perf))} (${perf.audience}석)  \n`;
     totalAmount += amountFor(perf);
@@ -85,5 +83,19 @@ function amountFor(aPerformance: Performance) {
       throw new Error(`Unknown play type: ${playFor(aPerformance)}`);
   }
 
+  return result;
+}
+
+/**
+ * 적립 포인트 계산 추출하기
+ *
+ * @param aPerformance
+ */
+function volumeCreditsFor(aPerformance: Performance) {
+  let result = 0;
+  result += Math.max(aPerformance.audience - 30, 0);
+  if (playFor(aPerformance).type === 'comedy') {
+    result += Math.floor(aPerformance.audience / 5);
+  }
   return result;
 }
