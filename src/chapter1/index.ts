@@ -34,21 +34,17 @@ for (const invoice of invoices) {
  *          - 변수 인라인하기 ( thisAmount )
  *          - 적립 포인트 계산 추출하기
  *          - format 변수 제거하기 ( 함수로 추출 )
+ *          - volumeCredits, totalAmout 변수 제거하기 ( 반복문쪼개기, 함수로 추출 )
  */
 function statement(invoice: Invoice, plays: Plays) {
-  let totalAmount = 0;
-  let volumeCredits = 0;
   let result = `청구 내역 (고객명: ${invoice.customer}) \n`;
 
   for (const perf of invoice.performances) {
-    volumeCredits += volumeCreditsFor(perf);
-
     result += ` ${playFor(perf).name}: ${krw(amountFor(perf))} (${perf.audience}석)  \n`;
-    totalAmount += amountFor(perf);
   }
 
-  result += `총액: ${krw(totalAmount)}\n`;
-  result += `적립포인트: ${volumeCredits}점\n`;
+  result += `총액: ${krw(totalAmount(invoice.performances))}\n`;
+  result += `적립포인트: ${totalVolumeCredits(invoice.performances)}점\n`;
   return result;
 }
 
@@ -107,4 +103,20 @@ function volumeCreditsFor(aPerformance: Performance) {
  */
 function krw(value: number) {
   return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(value);
+}
+
+function totalVolumeCredits(performances: Performance[]) {
+  let result = 0;
+  for (const perf of performances) {
+    result += volumeCreditsFor(perf);
+  }
+  return result;
+}
+
+function totalAmount(performances: Performance[]) {
+  let result = 0;
+  for (const perf of performances) {
+    result += amountFor(perf);
+  }
+  return result;
 }
