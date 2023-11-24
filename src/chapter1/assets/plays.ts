@@ -1,13 +1,11 @@
 /**
  * 극단이 공연할 공연 정보
  */
-export type Plays = Record<
-  string,
-  {
-    name: string;
-    type: 'tragedy' | 'comedy';
-  }
->;
+export type Play = {
+  name: string;
+  type: 'tragedy' | 'comedy';
+};
+export type Plays = Record<string, Play>;
 
 export const plays: Plays = {
   hamlet: {
